@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { Volume2, VolumeX, RotateCcw } from "lucide-react";
 
 interface Bubble {
   id: number;
@@ -17,7 +16,6 @@ export default function BubbleWrapBackground() {
   const [poppedCount, setPoppedCount] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [isPopMode, setIsPopMode] = useState(true);
-  const [isWidgetOpen, setIsWidgetOpen] = useState(false);
   const bubblesRef = useRef<Bubble[]>([]);
   const mouseRef = useRef<{ x: number; y: number; active: boolean }>({
     x: -1000,
@@ -365,95 +363,6 @@ export default function BubbleWrapBackground() {
           opacity: 0.9,
         }}
       />
-
-      {/* 3. Floating Glassmorphic Bubble Wrap Control & Fidget Widget */}
-      <div className="fixed bottom-5 right-5 z-40">
-        <div
-          className={`glass-panel rounded-2xl shadow-xl transition-all duration-300 ${
-            isWidgetOpen ? "p-4 w-72" : "p-2 px-3.5"
-          }`}
-        >
-          {isWidgetOpen ? (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-border/50">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">🫧</span>
-                  <div>
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">
-                      Bubble Wrap Mode
-                    </h4>
-                    <p className="text-[11px] text-muted-foreground">
-                      {poppedCount} bubbles popped
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setIsWidgetOpen(false)}
-                  className="text-xs text-muted-foreground hover:text-foreground p-1 rounded-md transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <button
-                  onClick={() => setIsPopMode(!isPopMode)}
-                  className={`py-2 px-2.5 rounded-lg border text-center font-medium transition-all ${
-                    isPopMode
-                      ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                      : "bg-muted/40 hover:bg-muted text-foreground border-border"
-                  }`}
-                >
-                  {isPopMode ? "Pop Active ⚡" : "Pop Disabled"}
-                </button>
-
-                <button
-                  onClick={() => setSoundEnabled(!soundEnabled)}
-                  className={`py-2 px-2.5 rounded-lg border flex items-center justify-center gap-1.5 font-medium transition-all ${
-                    soundEnabled
-                      ? "bg-primary/10 text-primary border-primary/30"
-                      : "bg-muted/40 text-muted-foreground border-border"
-                  }`}
-                >
-                  {soundEnabled ? (
-                    <>
-                      <Volume2 size={14} /> Sound ON
-                    </>
-                  ) : (
-                    <>
-                      <VolumeX size={14} /> Muted
-                    </>
-                  )}
-                </button>
-              </div>
-
-              <button
-                onClick={resetAllBubbles}
-                className="w-full py-2 px-3 rounded-lg border border-border/80 bg-background/50 hover:bg-background/80 text-foreground text-xs font-semibold flex items-center justify-center gap-1.5 transition-all active:scale-95"
-              >
-                <RotateCcw size={13} /> Reset All Bubbles
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => setIsWidgetOpen(true)}
-              className="flex items-center gap-2 text-xs font-medium text-foreground group focus-visible:outline-none"
-              title="Click to manage Bubble Wrap background"
-            >
-              <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
-              <span className="text-base group-hover:scale-110 transition-transform">
-                🫧
-              </span>
-              <span className="hidden sm:inline font-semibold">
-                Bubble Wrap:
-              </span>
-              <span className="px-1.5 py-0.5 rounded-full bg-primary/15 text-primary text-[11px] font-bold">
-                {poppedCount}
-              </span>
-            </button>
-          )}
-        </div>
-      </div>
     </>
   );
 }

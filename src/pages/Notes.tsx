@@ -56,30 +56,50 @@ export default function Notes() {
             ))}
           </div>
         ) : (
-          items.map((n) => (
-            <article
-              key={n.id || n.slug || n.title}
-              className="glass-card rounded-2xl border border-white/60 dark:border-white/10 p-6 sm:p-8 space-y-3 backdrop-blur-xl shadow-lg hover:shadow-2xl transition-all duration-300"
-            >
-              <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium block">
-                {n.date}
-              </span>
-              <h2 className="font-display text-2xl font-bold text-foreground">
-                {n.title}
-              </h2>
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                {n.excerpt}
-              </p>
-              {n.content && (
-                <div className="text-sm text-foreground/80 pt-2 border-t border-border/40 mt-3 leading-relaxed">
-                  {n.content}
+          items.map((n) => {
+            let parsedBlocks: any[] | null = null;
+            try {
+              if (n.content && n.content.trim().startsWith("[")) {
+                const parsed = JSON.parse(n.content);
+                if (Array.isArray(parsed)) parsedBlocks = parsed;
+              }
+            } catch {}
+
+            return (
+              <article
+                key={n.id || n.slug || n.title}
+                className="glass-card rounded-2xl border border-white/60 dark:border-white/10 p-6 sm:p-8 space-y-4 backdrop-blur-xl shadow-lg hover:shadow-2xl transition-all duration-300"
+              >
+                <div className="flex items-center justify-between text-xs text-muted-foreground font-medium">
+                  <span className="px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-primary font-semibold uppercase tracking-wider">
+                    Author Essay
+                  </span>
+                  <span>{n.date}</span>
                 </div>
-              )}
-              <div className="pt-2">
-                <span className="text-xs font-semibold text-primary">Written by Zahira Shaik</span>
-              </div>
-            </article>
-          ))
+                <h2 className="font-display text-2xl font-bold text-foreground">
+                  {n.title}
+                </h2>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                  {n.excerpt}
+                </p>
+                {parsedBlocks ? (
+                  <div className="space-y-4 text-sm text-foreground/90 pt-3 border-t border-border/40 mt-3 leading-relaxed">
+                    {parsedBlocks.map((b: any, bIdx: number) => {
+                      if (b.type === "text" && b.html) {
+                        return <div key={b.id || bIdx} dangerouslySetInnerHTML={{ __html: b.html }} />;
+                      }
+                      return null;
+                    })}
+                  </div>
+                ) : n.content ? (
+                  <div className="text-sm text-foreground/80 pt-3 border-t border-border/40 mt-3 leading-relaxed" dangerouslySetInnerHTML={{ __html: n.content }} />
+                ) : null}
+                <div className="pt-2">
+                  <span className="text-xs font-semibold text-primary">Written by Zahira Shaik</span>
+                </div>
+              </article>
+            );
+          })
         )}
       </section>
 

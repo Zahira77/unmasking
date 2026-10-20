@@ -316,6 +316,32 @@ export default function Admin() {
   useReveal();
   const [activeTab, setActiveTab] = useState<TabType>("lessons");
 
+  // Direct Link Passcode Gate
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return sessionStorage.getItem("unmasking_admin_auth") === "true";
+  });
+  const [passkeyInput, setPasskeyInput] = useState("");
+  const [authError, setAuthError] = useState("");
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleanKey = passkeyInput.trim();
+    if (cleanKey === "unmasking-admin-2026" || cleanKey === "admin") {
+      sessionStorage.setItem("unmasking_admin_auth", "true");
+      setIsAuthenticated(true);
+      setAuthError("");
+      toast.success("Admin session unlocked!");
+    } else {
+      setAuthError("Invalid access key. Please verify and try again.");
+    }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("unmasking_admin_auth");
+    setIsAuthenticated(false);
+    toast.info("Admin session locked.");
+  };
+
   // Data States
   const [lessons, setLessons] = useState<EntrepreneurLessonItem[]>([]);
   const [stories, setStories] = useState<StartupStoryItem[]>([]);
@@ -333,11 +359,12 @@ export default function Admin() {
 
   // Real-time synchronization hook
   const { isConnected } = useRealtimeSync("all", () => {
-    loadAllData(false);
+    if (isAuthenticated) loadAllData(false);
   });
 
   const loadAllData = async (showLoading = true) => {
     if (showLoading) setLoading(true);
+
     try {
       const [l, s, r, c, e, n, hr, sub] = await Promise.allSettled([
         adminApi.getLessons(false),
@@ -701,6 +728,49 @@ export default function Admin() {
     </div>
   );
 
+  if (!isAuthenticated) {
+    return (
+      <div className="container min-h-[80vh] flex items-center justify-center p-4">
+        <div className="glass-card max-w-md w-full p-8 rounded-3xl border border-white/60 dark:border-white/10 shadow-2xl backdrop-blur-2xl space-y-6 text-center">
+          <div className="mx-auto w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div className="space-y-1">
+            <span className="text-xs uppercase tracking-wider font-semibold text-primary">Direct Link Access Only</span>
+            <h1 className="font-display text-2xl font-bold text-foreground">Admin Portal Access</h1>
+            <p className="text-xs text-muted-foreground">Enter your admin security passkey to manage database content.</p>
+          </div>
+          <form onSubmit={handleLogin} className="space-y-4 text-left">
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-foreground">Admin Key</label>
+              <Input
+                type="password"
+                required
+                placeholder="Enter access key..."
+                value={passkeyInput}
+                onChange={(e) => setPasskeyInput(e.target.value)}
+                className="bg-background"
+                autoFocus
+              />
+            </div>
+            {authError && <p className="text-xs text-destructive font-medium">{authError}</p>}
+            <Button type="submit" className="w-full bg-primary text-primary-foreground font-semibold">
+              Unlock Dashboard
+            </Button>
+          </form>
+          <div className="pt-2 border-t border-border/40">
+            <a href="/" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              ← Return to Unmasking Homepage
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container pt-16 pb-24 min-h-screen space-y-8">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -733,6 +803,9 @@ export default function Admin() {
                 + Add Item
               </Button>
             )}
+            <Button onClick={handleLogout} variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
+              Lock Session
+            </Button>
           </div>
         </div>
 

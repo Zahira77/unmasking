@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { SUBSTACK_URL, X_URL, INSTAGRAM_URL } from "@/data/links";
+import { SUBSTACK_URL, X_URL, INSTAGRAM_URL, LINKEDIN_COMPANY_URL } from "@/data/links";
 
 function MailIcon({ size = 16 }: { size?: number }) {
   return (
@@ -70,7 +70,7 @@ export default function Footer() {
             </div>
             <div className="flex gap-3 pt-2">
               {[
-                { Icon: LinkedinIcon, href: "https://linkedin.com", label: "LinkedIn", external: true },
+                { Icon: LinkedinIcon, href: LINKEDIN_COMPANY_URL, label: "LinkedIn", external: true },
                 { Icon: XIcon, href: X_URL, label: "X", external: true },
                 { Icon: InstagramIcon, href: INSTAGRAM_URL, label: "Instagram", external: true },
                 { Icon: SubstackIcon, href: SUBSTACK_URL, label: "Substack", external: true },

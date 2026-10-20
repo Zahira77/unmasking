@@ -153,11 +153,16 @@ export const adminApi = {
   // Startup Stories
   getStartupStories: (publishedOnly = false) =>
     request<StartupStoryItem[]>(`/api/startup-stories?published_only=${publishedOnly}`),
+  getStartupStoryBySlug: (slug: string) =>
+    request<StartupStoryItem>(`/api/startup-stories/by-slug/${slug}`),
+  getStartupStoryById: (id: number) =>
+    request<StartupStoryItem>(`/api/startup-stories/${id}`),
   createStartupStory: (data: StartupStoryItem) =>
     request<StartupStoryItem>("/api/startup-stories", { method: "POST", body: JSON.stringify(data) }),
   updateStartupStory: (id: number, data: StartupStoryItem) =>
     request<StartupStoryItem>(`/api/startup-stories/${id}`, { method: "PUT", body: JSON.stringify(data) }),
   deleteStartupStory: (id: number) => request<{ status: string }>(`/api/startup-stories/${id}`, { method: "DELETE" }),
+
 
   // Reality of Startups
   getRealitySeries: (publishedOnly = false) =>

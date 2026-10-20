@@ -1,93 +1,53 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  /* LIGHT THEME - Translucent Glassmorphism Base */
-  :root {
-    --background: 215 35% 97%;
-    --foreground: 222 47% 11%;
+  /* DARK THEME - Luxurious Midnight Editorial Print */
+  :root,
+  .dark {
+    --background: 222 28% 8%;          /* #0e1217 - Midnight Ink Paper */
+    --foreground: 40 20% 95%;          /* #F4F2EC - Warm Cream Type */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card: 222 24% 11%;               /* #141820 */
+    --card-foreground: 40 20% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover: 222 24% 11%;
+    --popover-foreground: 40 20% 95%;
 
-    --primary: 217 91% 54%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 217 91% 65%;
+    --primary: 217 91% 64%;
+    --primary-foreground: 222 28% 8%;
+    --primary-glow: 217 91% 75%;
 
-    --secondary: 214 32% 91%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 222 20% 16%;
+    --secondary-foreground: 40 20% 95%;
 
-    --muted: 214 32% 93%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 222 18% 14%;
+    --muted-foreground: 218 14% 64%;
 
-    --accent: 217 91% 54%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 217 91% 64%;
+    --accent-foreground: 222 28% 8%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 40 20% 98%;
 
-    --border: 214 32% 88%;
-    --input: 214 32% 88%;
-    --ring: 217 91% 54%;
+    --border: 222 18% 20%;
+    --input: 222 18% 20%;
+    --ring: 217 91% 64%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;                  /* Crisp editorial corners */
     --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
 
-    /* Glass Tokens - Light */
-    --glass-bg: rgba(255, 255, 255, 0.65);
-    --glass-bg-hover: rgba(255, 255, 255, 0.82);
-    --glass-border: rgba(255, 255, 255, 0.85);
-    --glass-border-subtle: rgba(255, 255, 255, 0.55);
-    --glass-highlight: rgba(255, 255, 255, 0.95);
-    --glass-shadow: 0 12px 36px 0 rgba(31, 38, 135, 0.09);
-    --glass-inner-bevel: inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
-  }
-
-  /* DARK THEME - Deep Luminous Glass Base */
-  .dark {
-    --background: 224 45% 6%;
-    --foreground: 210 40% 98%;
-
-    --card: 224 40% 9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 224 40% 9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 217 91% 70%;
-
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217 33% 15%;
-    --muted-foreground: 215 20% 65%;
-
-    --accent: 217 91% 60%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217 33% 20%;
-    --input: 217 33% 20%;
-    --ring: 217 91% 60%;
-
-    /* Glass Tokens - Dark */
-    --glass-bg: rgba(15, 23, 42, 0.62);
-    --glass-bg-hover: rgba(24, 34, 58, 0.78);
-    --glass-border: rgba(255, 255, 255, 0.14);
-    --glass-border-subtle: rgba(255, 255, 255, 0.08);
-    --glass-highlight: rgba(255, 255, 255, 0.22);
-    --glass-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.55);
-    --glass-inner-bevel: inset 0 1px 1px 0 rgba(255, 255, 255, 0.16);
+    /* Editorial Tokens - Dark */
+    --glass-bg: rgba(14, 18, 23, 0.78);
+    --glass-bg-hover: rgba(20, 26, 34, 0.88);
+    --glass-border: rgba(244, 242, 236, 0.12);
+    --glass-border-subtle: rgba(244, 242, 236, 0.07);
+    --glass-highlight: rgba(244, 242, 236, 0.2);
+    --glass-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.65);
+    --glass-inner-bevel: inset 0 1px 0 0 rgba(244, 242, 236, 0.1);
   }
 }
 
@@ -102,16 +62,18 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    line-height: 1.6;
+    font-family: 'Newsreader', 'Plus Jakarta Sans', Georgia, serif;
+    line-height: 1.68;
     overflow-x: hidden;
     max-width: 100%;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
     transition: background-color 250ms ease-out, color 250ms ease-out;
   }
   h1, h2, h3, h4 {
     font-family: 'Fraunces', Georgia, serif;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.022em;
+    font-feature-settings: "liga" 1, "dlig" 1;
   }
   
   :focus-visible {
@@ -355,6 +317,104 @@
   }
   100% {
     background-position: 200% 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   EDITORIAL NEWSPAPER & ARTICLE DESIGN SYSTEM
+═══════════════════════════════════════════════════════ */
+
+@layer utilities {
+  /* Newspaper / Magazine Masthead Frame */
+  .editorial-masthead-rule {
+    border-top: 2px solid hsl(var(--foreground));
+    border-bottom: 1px solid hsl(var(--foreground) / 0.6);
+  }
+
+  /* Hairline Column Divider */
+  .editorial-divider {
+    border-left: 1px solid hsl(var(--border));
+  }
+
+  /* Classic Magazine Drop Cap */
+  .editorial-dropcap::first-letter {
+    font-family: 'Fraunces', Georgia, serif;
+    float: left;
+    font-size: 3.85rem;
+    line-height: 0.8;
+    padding-top: 0.25rem;
+    padding-right: 0.65rem;
+    padding-bottom: 0.1rem;
+    font-weight: 700;
+    color: hsl(var(--primary));
+  }
+
+  /* Editorial Pull Quote */
+  .editorial-pullquote {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    border-top: 2px solid hsl(var(--foreground));
+    border-bottom: 2px solid hsl(var(--foreground));
+    padding: 1.5rem 0;
+    margin: 2rem 0;
+    line-height: 1.35;
+  }
+
+  /* Deck / Summary Subtitle */
+  .editorial-deck {
+    font-family: 'Newsreader', Georgia, serif;
+    font-style: italic;
+    color: hsl(var(--muted-foreground));
+    line-height: 1.5;
+  }
+
+  /* Kicker / Stamp Label */
+  .editorial-kicker {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: hsl(var(--primary));
+  }
+
+  /* Byline / Dateline */
+  .editorial-byline {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: hsl(var(--muted-foreground));
+  }
+
+  /* Article Card with Hairline Print Borders */
+  .editorial-article-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    transition: all 250ms var(--ease-editorial);
+    position: relative;
+  }
+  .editorial-article-card:hover {
+    border-color: hsl(var(--primary));
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.08);
+  }
+  .dark .editorial-article-card:hover {
+    box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Newspaper broadside rule */
+  .editorial-broadside-rule {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--border)),
+      hsl(var(--foreground) / 0.3),
+      hsl(var(--border)),
+      transparent
+    );
   }
 }
 

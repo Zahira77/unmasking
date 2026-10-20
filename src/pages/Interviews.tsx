@@ -2,11 +2,12 @@ import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { interviews as defaultInterviews } from "@/data/content";
 import { NewsletterSubscribe } from "@/components/NewsletterSubscribe";
+import { ComingSoonCard } from "@/components/ComingSoonCard";
 import { adminApi, EntrepreneurLessonItem } from "@/lib/adminContentApi";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
 export default function Interviews() {
-  const [items, setItems] = useState<any[]>(defaultInterviews);
+  const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const loadLessons = useCallback(() => {
@@ -19,16 +20,18 @@ export default function Interviews() {
             name: d.name,
             title: d.title,
             excerpt: d.excerpt,
-            image: d.image_url || defaultInterviews[idx % defaultInterviews.length]?.image,
+            image: d.image_url || defaultInterviews[idx % defaultInterviews.length]?.image || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
             category: d.category,
             date: d.date,
             readTime: d.read_time,
           }));
           setItems(formatted);
+        } else {
+          setItems([]);
         }
       })
       .catch(() => {
-        // Fallback to static content
+        setItems([]);
       })
       .finally(() => {
         setLoading(false);
@@ -70,6 +73,13 @@ export default function Interviews() {
               </div>
             ))}
           </div>
+        ) : items.length === 0 ? (
+          <ComingSoonCard
+            sectionName="Entrepreneur Lessons"
+            badge="Founders, Unfiltered"
+            title="Coming Soon, Stay Tuned!"
+            description="We are recording unvarnished tactical frameworks and deep conversations with visionary builders. As soon as lessons are published via the Admin Dashboard, they will go live right here."
+          />
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {items.map((p) => (

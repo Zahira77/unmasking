@@ -52,17 +52,19 @@ export default function Home() {
       .getHomeReader(true)
       .then((data: HomeReaderItem[]) => {
         if (data && data.length > 0) {
-          // Map tab_id to reader content slots
           const newContent = [...defaultReaderContent];
-          data.forEach((item) => {
-            if (item.tab_id >= 0 && item.tab_id < 3) {
-              newContent[item.tab_id] = {
-                tag: item.tag,
-                date: item.date,
-                title: item.title,
-                body: item.body,
-                source: item.source || "Unmasking Editorial",
-                label: item.label || "Live from Unmasking",
+          // For each tab slot (0: News, 1: Fact, 2: Update), map to the latest published admin entry
+          [0, 1, 2].forEach((tabIdx) => {
+            const matches = data.filter((item) => item.tab_id === tabIdx);
+            if (matches.length > 0) {
+              const latest = matches[matches.length - 1];
+              newContent[tabIdx] = {
+                tag: latest.tag,
+                date: latest.date,
+                title: latest.title,
+                body: latest.body,
+                source: latest.source || "Unmasking Editorial",
+                label: latest.label || "Live from Unmasking",
               };
             }
           });

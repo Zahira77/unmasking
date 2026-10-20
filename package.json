@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "python -m uvicorn main:app --reload --app-dir backend --port 8000",
+    "dev:all": "concurrently -n \"web,api\" -c \"cyan,magenta\" \"npm run dev\" \"npm run server\"",
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
@@ -73,6 +75,7 @@
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^10.0.6",
     "eslint": "^9.32.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",

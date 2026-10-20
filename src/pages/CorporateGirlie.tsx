@@ -1,35 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
 import { adminApi, CorporateGirlieItem } from "@/lib/adminContentApi";
+import { ComingSoonCard } from "@/components/ComingSoonCard";
 import { SUBSTACK_URL } from "@/data/links";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
-const defaultCorporateGirlies: CorporateGirlieItem[] = [
-  {
-    id: 1,
-    slug: "navigating-office-politics-with-grace",
-    title: "Navigating Office Politics Without Losing Yourself",
-    author: "Sarah Jenkins",
-    excerpt: "Corporate games are real, but you do not have to compromise your integrity to win. Here is the strategic playbook.",
-    tag: "Career Growth",
-    date: "Jun 01, 2026",
-    published: true,
-    substack_url: SUBSTACK_URL, // ← replace with exact Substack article URL if specific
-  },
-  {
-    id: 2,
-    slug: "the-art-of-saying-no-at-work",
-    title: "The Art of Saying No Without Hurting Your Career",
-    author: "Elena Rostova",
-    excerpt: "Overcommitted and burnt out? How to set clear boundaries with managers and teammates while staying a top performer.",
-    tag: "Workplace Culture",
-    date: "May 24, 2026",
-    published: true,
-    substack_url: SUBSTACK_URL, // ← replace with exact Substack article URL if specific
-  },
-];
-
 export default function CorporateGirlie() {
-  const [items, setItems] = useState<CorporateGirlieItem[]>(defaultCorporateGirlies);
+  const [items, setItems] = useState<CorporateGirlieItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   const loadCorporate = useCallback(() => {
@@ -42,10 +18,12 @@ export default function CorporateGirlie() {
             substack_url: item.substack_url?.trim() || SUBSTACK_URL,
           }));
           setItems(mapped);
+        } else {
+          setItems([]);
         }
       })
       .catch(() => {
-        // Fallback to defaultCorporateGirlies
+        setItems([]);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -99,6 +77,13 @@ export default function CorporateGirlie() {
               </div>
             ))}
           </div>
+        ) : items.length === 0 ? (
+          <ComingSoonCard
+            sectionName="Corporate Girlie in Startup"
+            badge="Workplace Survival Guides"
+            title="Coming Soon, Stay Tuned!"
+            description="We are preparing candid columns, corporate survival tactics, and career navigation strategies for startup operators. When articles are published from the Admin, they will appear here directly."
+          />
         ) : (
           <div className="grid md:grid-cols-2 gap-6">
             {items.map((story) => {

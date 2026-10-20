@@ -34,9 +34,7 @@ export default function InterviewDetail() {
         }
       })
       .catch(() => {
-        // Fall back to static mock data
-        const staticItem = defaultInterviews.find((p) => p.slug === slug);
-        if (staticItem) setPost(staticItem);
+        setPost(null);
       })
       .finally(() => setLoading(false));
   }, [slug]);

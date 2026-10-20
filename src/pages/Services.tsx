@@ -1,5 +1,6 @@
 import React from "react";
 import { useReveal } from "@/hooks/useReveal";
+import { LINKEDIN_COMPANY_URL } from "@/data/links";
 
 export default function Services() {
   useReveal();
@@ -133,7 +134,7 @@ export default function Services() {
               info@unmasking.com
             </a>
             <a
-              href="https://www.linkedin.com/company/unmasking-entrepreneurs/"
+              href={LINKEDIN_COMPANY_URL}
               id="services-linkedin-cta"
               target="_blank"
               rel="noopener noreferrer"

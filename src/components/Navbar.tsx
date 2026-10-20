@@ -1,7 +1,6 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { ThemeToggle } from "./ThemeToggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,14 +13,13 @@ const primaryLinks = [
   { to: "/about", label: "About" },
   { to: "/interviews", label: "Entrepreneur Lessons" },
   { to: "/startup-stories", label: "Startup Stories" },
+  { to: "/events", label: "Event Documentaries" },
   { to: "/services", label: "Services" },
 ];
 
 const moreLinks = [
   { to: "/corporate-girlie", label: "Corporate Girlie" },
-  { to: "/events", label: "Event Documentaries" },
   { to: "/subscribe", label: "Subscribe" },
-  { to: "/admin", label: "Admin Dashboard" },
 ];
 
 const allLinks = [...primaryLinks, ...moreLinks];
@@ -91,8 +89,8 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Navigation & Theme Toggle */}
-        <nav className="hidden lg:flex items-center gap-6 ml-auto" aria-label="Main Navigation">
+        {/* Desktop Navigation */}
+        <nav className="hidden lg:flex items-center gap-5 xl:gap-6 ml-auto" aria-label="Main Navigation">
           {primaryLinks.map((l) => (
             <NavLink
               key={l.to}
@@ -142,14 +140,10 @@ export default function Navbar() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-
-          {/* Light / Dark Theme Toggle Button */}
-          <ThemeToggle />
         </nav>
 
         {/* Mobile Header Actions */}
-        <div className="flex items-center gap-2 lg:hidden">
-          <ThemeToggle />
+        <div className="flex items-center lg:hidden">
           <button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/40 dark:border-white/10 bg-white/40 dark:bg-white/5 backdrop-blur-md text-foreground hover:bg-white/60 dark:hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none transition-colors"

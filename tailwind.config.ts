@@ -16,8 +16,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        display: ["Fraunces", "serif"],
+        sans: ["Plus Jakarta Sans", "Inter", "system-ui", "sans-serif"],
+        display: ["Fraunces", "Playfair Display", "Georgia", "serif"],
+        serif: ["Newsreader", "Charter", "Georgia", "serif"],
+        editorial: ["Newsreader", "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",

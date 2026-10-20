@@ -42,6 +42,9 @@ def ensure_mysql_database(db_url: str):
 # Build engine — attempt MySQL first; fallback gracefully to SQLite if MySQL is not available
 Base = declarative_base()
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SQLITE_FALLBACK = f"sqlite:///{os.path.join(BASE_DIR, 'verity.db').replace(os.sep, '/')}"
+
 try:
     if DATABASE_URL.startswith("sqlite"):
         engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
@@ -62,8 +65,8 @@ try:
         print(f"[*] Successfully connected to MySQL database: {DATABASE_URL}")
 except Exception as err:
     print(f"[!] MySQL not reachable ({err}). Falling back to local SQLite 'verity.db' for development.")
-    SQLITE_FALLBACK = "sqlite:///verity.db"
     engine = create_engine(SQLITE_FALLBACK, connect_args={"check_same_thread": False})
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 

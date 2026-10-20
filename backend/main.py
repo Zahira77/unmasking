@@ -12,13 +12,38 @@ from pydantic import BaseModel
 import models
 from database import engine, SessionLocal
 
+import re
+
 # Load environment variables
 load_dotenv()
+
+def slugify(text: str) -> str:
+    s = text.lower().strip()
+    s = re.sub(r'[^\w\s-]', '', s)
+    s = re.sub(r'[\s_-]+', '-', s)
+    return s.strip('-')
+
+app = FastAPI(title="Verity Insights API & Real-Time Content Hub")
 
 # Automatically create tables (against MySQL if connected, or fallback SQLite)
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Verity Insights API & Real-Time Content Hub")
+@app.on_event("startup")
+def startup_seed_check():
+    models.Base.metadata.create_all(bind=engine)
+    db = SessionLocal()
+    try:
+        count = db.query(models.StartupStory).count()
+        if count == 0:
+            print("[*] No startup stories found in database. Automatically seeding initial database content...")
+            from seed_all import seed_all_data
+            seed_all_data(db, force_refresh=False)
+            print("[*] Initial seed complete!")
+    except Exception as e:
+        print(f"[*] Startup initialization note: {e}")
+    finally:
+        db.close()
+
 
 # Configure CORS
 app.add_middleware(
@@ -243,7 +268,14 @@ async def update_lesson(item_id: int, item: LessonSchema, db: Session = Depends(
     db_item = db.query(models.EntrepreneurLesson).filter(models.EntrepreneurLesson.id == item_id).first()
     if not db_item:
         raise HTTPException(status_code=404, detail="Lesson not found")
-    for key, value in item.dict().items():
+    data = item.dict()
+    for key, value in data.items():
+        if key == "slug":
+            if value:
+                db_item.slug = value
+            elif not db_item.slug and item.title:
+                db_item.slug = slugify(item.title)
+            continue
         setattr(db_item, key, value)
     db.commit()
     db.refresh(db_item)
@@ -270,9 +302,23 @@ def get_startup_stories(published_only: bool = False, db: Session = Depends(get_
         query = query.filter(models.StartupStory.published == True)
     return query.all()
 
+@app.get("/api/startup-stories/{item_id}")
+def get_startup_story_by_id(item_id: int, db: Session = Depends(get_db)):
+    item = db.query(models.StartupStory).filter(models.StartupStory.id == item_id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Startup story not found")
+    return item
+
+@app.get("/api/startup-stories/by-slug/{slug}")
+def get_startup_story_by_slug(slug: str, db: Session = Depends(get_db)):
+    item = db.query(models.StartupStory).filter(models.StartupStory.slug == slug).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Startup story not found")
+    return item
+
 @app.post("/api/startup-stories")
 async def create_startup_story(item: StartupStorySchema, db: Session = Depends(get_db)):
-    slug = item.slug or item.title.lower().replace(" ", "-").replace("?", "")
+    slug = item.slug or slugify(item.title)
     db_item = models.StartupStory(**item.dict())
     db_item.slug = slug
     db.add(db_item)
@@ -286,12 +332,20 @@ async def update_startup_story(item_id: int, item: StartupStorySchema, db: Sessi
     db_item = db.query(models.StartupStory).filter(models.StartupStory.id == item_id).first()
     if not db_item:
         raise HTTPException(status_code=404, detail="Story not found")
-    for key, value in item.dict().items():
+    data = item.dict()
+    for key, value in data.items():
+        if key == "slug":
+            if value:
+                db_item.slug = value
+            elif not db_item.slug and item.title:
+                db_item.slug = slugify(item.title)
+            continue
         setattr(db_item, key, value)
     db.commit()
     db.refresh(db_item)
     await broadcast_change("startup_stories", "updated", db_item.id)
     return db_item
+
 
 @app.delete("/api/startup-stories/{item_id}")
 async def delete_startup_story(item_id: int, db: Session = Depends(get_db)):
@@ -329,7 +383,14 @@ async def update_reality_series(series_id: int, item: RealitySeriesSchema, db: S
     db_item = db.query(models.RealitySeries).filter(models.RealitySeries.id == series_id).first()
     if not db_item:
         raise HTTPException(status_code=404, detail="Series not found")
-    for key, value in item.dict().items():
+    data = item.dict()
+    for key, value in data.items():
+        if key == "slug":
+            if value:
+                db_item.slug = value
+            elif not db_item.slug and item.title:
+                db_item.slug = slugify(item.title)
+            continue
         setattr(db_item, key, value)
     db.commit()
     db.refresh(db_item)
@@ -379,7 +440,7 @@ def get_corporate_girlie(published_only: bool = False, db: Session = Depends(get
 
 @app.post("/api/corporate-girlie")
 async def create_corporate_girlie(item: CorporateGirlieSchema, db: Session = Depends(get_db)):
-    slug = item.slug or item.title.lower().replace(" ", "-").replace("?", "")
+    slug = item.slug or slugify(item.title)
     db_item = models.CorporateGirlie(**item.dict())
     db_item.slug = slug
     db.add(db_item)
@@ -393,7 +454,14 @@ async def update_corporate_girlie(item_id: int, item: CorporateGirlieSchema, db:
     db_item = db.query(models.CorporateGirlie).filter(models.CorporateGirlie.id == item_id).first()
     if not db_item:
         raise HTTPException(status_code=404, detail="Corporate Girlie post not found")
-    for key, value in item.dict().items():
+    data = item.dict()
+    for key, value in data.items():
+        if key == "slug":
+            if value:
+                db_item.slug = value
+            elif not db_item.slug and item.title:
+                db_item.slug = slugify(item.title)
+            continue
         setattr(db_item, key, value)
     db.commit()
     db.refresh(db_item)
@@ -434,7 +502,8 @@ async def update_event(item_id: int, item: EventDocumentarySchema, db: Session =
     db_item = db.query(models.EventDocumentary).filter(models.EventDocumentary.id == item_id).first()
     if not db_item:
         raise HTTPException(status_code=404, detail="Event not found")
-    for key, value in item.dict().items():
+    data = item.dict()
+    for key, value in data.items():
         setattr(db_item, key, value)
     db.commit()
     db.refresh(db_item)
@@ -470,7 +539,7 @@ def get_note_by_slug(slug: str, db: Session = Depends(get_db)):
 
 @app.post("/api/notes")
 async def create_note(item: AuthorNoteSchema, db: Session = Depends(get_db)):
-    slug = item.slug or item.title.lower().replace(" ", "-").replace("?", "")
+    slug = item.slug or slugify(item.title)
     db_item = models.AuthorNote(**item.dict())
     db_item.slug = slug
     db.add(db_item)
@@ -484,7 +553,14 @@ async def update_note(item_id: int, item: AuthorNoteSchema, db: Session = Depend
     db_item = db.query(models.AuthorNote).filter(models.AuthorNote.id == item_id).first()
     if not db_item:
         raise HTTPException(status_code=404, detail="Note not found")
-    for key, value in item.dict().items():
+    data = item.dict()
+    for key, value in data.items():
+        if key == "slug":
+            if value:
+                db_item.slug = value
+            elif not db_item.slug and item.title:
+                db_item.slug = slugify(item.title)
+            continue
         setattr(db_item, key, value)
     db.commit()
     db.refresh(db_item)

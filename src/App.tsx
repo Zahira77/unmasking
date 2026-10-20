@@ -14,6 +14,8 @@ import CorporateGirlie from "./pages/CorporateGirlie";
 import EventDocumentaries from "./pages/EventDocumentaries";
 import Services from "./pages/Services";
 import StartupStories from "./pages/StartupStories";
+import RealityOfStartups from "./pages/RealityOfStartups";
+import RealityDocumentary from "./pages/RealityDocumentary";
 import Admin from "./pages/Admin";
 import Subscribe from "./pages/Subscribe";
 import Terms from "./pages/Terms";
@@ -36,6 +38,8 @@ const App = () => (
               <Route path="/interviews" element={<Interviews />} />
               <Route path="/interviews/:slug" element={<InterviewDetail />} />
               <Route path="/startup-stories" element={<StartupStories />} />
+              <Route path="/reality-of-startups" element={<RealityOfStartups />} />
+              <Route path="/reality-of-startups/:slug" element={<RealityDocumentary />} />
               <Route path="/corporate-girlie" element={<CorporateGirlie />} />
               <Route path="/notes" element={<Notes />} />
               <Route path="/events" element={<EventDocumentaries />} />
