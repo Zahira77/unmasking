@@ -98,7 +98,7 @@ export default function InterviewDetail() {
           <p className="text-base sm:text-lg text-muted-foreground mt-2 font-medium">{post.subtitle}</p>
         )}
         <div className="mt-4 text-xs text-muted-foreground">
-          Interviewed by Zahira Shaik with {post.name} • {post.date} • {post.readTime}
+          Interview with {post.name} • {post.date} • {post.readTime}
         </div>
       </div>
 

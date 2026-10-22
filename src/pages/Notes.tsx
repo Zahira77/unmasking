@@ -40,7 +40,7 @@ export default function Notes() {
           Author Notes & Essays
         </h1>
         <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
-          Personal essays, ecosystem observations, and reflections written by Zahira Shaik.
+          Personal essays, ecosystem observations, and reflections from the Unmasking Editorial desk.
         </p>
       </section>
 
@@ -95,7 +95,7 @@ export default function Notes() {
                   <div className="text-sm text-foreground/80 pt-3 border-t border-border/40 mt-3 leading-relaxed" dangerouslySetInnerHTML={{ __html: n.content }} />
                 ) : null}
                 <div className="pt-2">
-                  <span className="text-xs font-semibold text-primary">Written by Zahira Shaik</span>
+                  <span className="text-xs font-semibold text-primary">Unmasking Editorial</span>
                 </div>
               </article>
             );

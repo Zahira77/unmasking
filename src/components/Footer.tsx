@@ -58,7 +58,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-muted-foreground max-w-md text-sm leading-relaxed">
-              Independent founder interviews, editorial essays, and high-conviction content strategy by Zahira Shaik.
+              Independent founder interviews, editorial essays, and high-conviction content strategy by the Unmasking Editorial team.
             </p>
             <div className="pt-2">
               <a

@@ -117,7 +117,7 @@ export interface RegistrationItem {
   source: string;
 }
 
-const API_BASE = ""; // Proxied to FastAPI via Vite /api
+export const API_BASE = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
 
 async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${endpoint}`, {

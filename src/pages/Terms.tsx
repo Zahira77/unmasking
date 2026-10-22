@@ -24,7 +24,7 @@ export default function Terms() {
           <section className="space-y-3">
             <h2 className="font-display text-xl font-semibold text-foreground">2. Editorial Content and Intellectual Property</h2>
             <p>
-              All original articles, interviews, audio transcripts, event documentaries, and brand materials published on Unmasking are owned by Unmasking and Zahira Shaik unless explicitly stated otherwise.
+              All original articles, interviews, audio transcripts, event documentaries, and brand materials published on Unmasking are owned by Unmasking unless explicitly stated otherwise.
             </p>
             <p>
               You may quote or share excerpts of our published content for non-commercial editorial commentary provided you include explicit attribution and a direct link back to the original article on Unmasking.

@@ -114,7 +114,7 @@ export default function Interviews() {
                 </div>
 
                 <div className="p-6 pt-0 border-t border-white/30 dark:border-white/10 mt-auto flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground font-medium">By Zahira Shaik</span>
+                  <span className="text-muted-foreground font-medium">By Unmasking Editorial</span>
                   <Link
                     to={`/interviews/${p.slug}`}
                     className="text-primary font-semibold hover:underline flex items-center gap-1"

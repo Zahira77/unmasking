@@ -25,9 +25,17 @@ export function useRealtimeSync(
     function connect() {
       if (isUnmounted) return;
 
-      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-      const host = window.location.host; // e.g. localhost:8080 or localhost:8000
-      const wsUrl = `${protocol}//${host}/api/ws/content`;
+      let wsUrl: string;
+      const apiEnv = import.meta.env.VITE_API_URL;
+      if (apiEnv) {
+        const cleanUrl = apiEnv.replace(/\/+$/, "");
+        const wsBase = cleanUrl.replace(/^http:\/\//i, "ws://").replace(/^https:\/\//i, "wss://");
+        wsUrl = `${wsBase}/api/ws/content`;
+      } else {
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        const host = window.location.host;
+        wsUrl = `${protocol}//${host}/api/ws/content`;
+      }
 
       try {
         ws = new WebSocket(wsUrl);

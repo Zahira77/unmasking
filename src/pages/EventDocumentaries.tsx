@@ -166,7 +166,7 @@ export default function EventDocumentaries() {
                 </div>
 
                 <div className="pt-4 border-t border-white/30 dark:border-white/10 flex items-center justify-between text-xs text-muted-foreground">
-                  <span>Documented by {doc.author || "Zahira Shaik"}</span>
+                  <span>Documented by {doc.author || "Unmasking Editorial"}</span>
                   <span className="text-primary font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
                     <span>Read Report</span>
                     <span>→</span>

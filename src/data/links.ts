@@ -8,7 +8,6 @@ export const LINKEDIN_COMPANY_URL = "https://www.linkedin.com/company/unmasking-
 
 export const LINKEDIN_URLS = {
   company: LINKEDIN_COMPANY_URL,
-  zahira: "https://in.linkedin.com/in/zahira-shaik-1ab213262",
   mohan: "https://in.linkedin.com/in/mohan-k-gola",
 };
 

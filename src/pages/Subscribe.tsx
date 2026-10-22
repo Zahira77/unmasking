@@ -2,6 +2,7 @@ import { useSearchParams, Link } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "sonner";
 import { NewsletterSubscribe } from "@/components/NewsletterSubscribe";
+import { API_BASE } from "@/lib/adminContentApi";
 
 export default function Subscribe() {
   const [searchParams] = useSearchParams();
@@ -27,7 +28,7 @@ export default function Subscribe() {
     setStatus("loading");
 
     try {
-      const response = await fetch("/api/register", {
+      const response = await fetch(`${API_BASE}/api/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, source: type }),
