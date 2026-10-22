@@ -1,6 +1,6 @@
 import os
 import re
-from urllib.parse import urlparse
+from urllib.parse import urlparse, unquote
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -23,12 +23,15 @@ def ensure_mysql_database(db_url: str):
         if not db_name:
             return
 
+        user = unquote(parsed.username) if parsed.username else "root"
+        password = unquote(parsed.password) if parsed.password else ""
+
         conn = pymysql.connect(
             host=parsed.hostname or "localhost",
             port=parsed.port or 3306,
-            user=parsed.username or "root",
-            password=parsed.password or "",
-            connect_timeout=3
+            user=user,
+            password=password,
+            connect_timeout=5
         )
         with conn.cursor() as cursor:
             cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{db_name}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;")
@@ -36,8 +39,7 @@ def ensure_mysql_database(db_url: str):
         conn.close()
         print(f"[*] Verified MySQL database '{db_name}' exists.")
     except Exception as e:
-        print(f"[!] Warning: Could not connect directly to MySQL server: {e}")
-        raise e
+        print(f"[!] Warning: Could not verify/create MySQL database via raw admin connection: {e}")
 
 # Build engine — attempt MySQL first; fallback gracefully to SQLite if MySQL is not available
 Base = declarative_base()
