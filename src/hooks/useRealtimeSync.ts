@@ -22,19 +22,31 @@ export function useRealtimeSync(
     let reconnectTimeout: any = null;
     let isUnmounted = false;
 
+    let retryCount = 0;
+    const MAX_RETRIES = 3;
+
     function connect() {
       if (isUnmounted) return;
 
-      let wsUrl: string;
+      let wsUrl: string | null = null;
       const apiEnv = import.meta.env.VITE_API_URL;
       if (apiEnv) {
         const cleanUrl = apiEnv.replace(/\/+$/, "");
         const wsBase = cleanUrl.replace(/^http:\/\//i, "ws://").replace(/^https:\/\//i, "wss://");
         wsUrl = `${wsBase}/api/ws/content`;
-      } else {
+      } else if (
+        typeof window !== "undefined" &&
+        (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+      ) {
+        // Only attempt relative WebSocket on localhost development
         const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
         const host = window.location.host;
         wsUrl = `${protocol}//${host}/api/ws/content`;
+      }
+
+      // If no remote backend URL is provided and not on localhost, WebSocket is unavailable
+      if (!wsUrl) {
+        return;
       }
 
       try {
@@ -43,7 +55,7 @@ export function useRealtimeSync(
         ws.onopen = () => {
           if (!isUnmounted) {
             setIsConnected(true);
-            // Send periodic heartbeat ping
+            retryCount = 0;
             ws?.send("ping");
           }
         };
@@ -76,18 +88,27 @@ export function useRealtimeSync(
         ws.onclose = () => {
           if (!isUnmounted) {
             setIsConnected(false);
-            // Retry after 3 seconds
-            reconnectTimeout = setTimeout(connect, 3000);
+            if (retryCount < MAX_RETRIES) {
+              retryCount += 1;
+              const delay = Math.min(3000 * Math.pow(2, retryCount - 1), 30000);
+              reconnectTimeout = setTimeout(connect, delay);
+            }
           }
         };
 
         ws.onerror = () => {
-          ws?.close();
+          try {
+            ws?.close();
+          } catch {}
         };
       } catch (err) {
         if (!isUnmounted) {
           setIsConnected(false);
-          reconnectTimeout = setTimeout(connect, 3000);
+          if (retryCount < MAX_RETRIES) {
+            retryCount += 1;
+            const delay = Math.min(3000 * Math.pow(2, retryCount - 1), 30000);
+            reconnectTimeout = setTimeout(connect, delay);
+          }
         }
       }
     }
